@@ -48,7 +48,6 @@ step = 0.01
 n = int(domain[1] - domain[0]) / step
 
 x = np.arange(domain[0], domain[1], step)
-y = np.zeros(len(x))
 d = np.frompyfunc(density, 3, 1)(x, y, a)
 
 df_pdf = pd.DataFrame(data={
