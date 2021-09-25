@@ -1,4 +1,8 @@
 .vscode/
+tests/Circular_Law/
+tests/Marchenko_Pastur/
+tests/Semicircle_Law/
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
