@@ -1,9 +1,8 @@
 .vscode/
 sample/
-tests/*/
 tests/*_.py
 
-*.csv
+# *.csv
 
 
 # Byte-compiled / optimized / DLL files

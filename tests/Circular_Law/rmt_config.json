@@ -1,0 +1,11 @@
+{
+	"plot_types": {
+		"density1D": false,
+		"supportBoundary": true,
+		"fill": true,
+		"icon": true,
+		"histogram1D": false,
+		"scatter": true,
+		"overlay": true
+	}
+}
