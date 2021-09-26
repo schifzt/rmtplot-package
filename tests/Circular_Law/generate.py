@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+from pathlib import Path
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 
@@ -9,10 +10,13 @@ import matplotlib.pyplot as plt
 n = 5000
 
 params = np.array([n])
-np.savetxt('params.csv', params, delimiter=',', fmt='%.3f')
+np.savetxt(str(Path(__file__).resolve().parent) + '/parameters.csv', params,
+           delimiter=',', fmt='%.3f')
 
-# Generate a random matrix
-# X: n x n matrices
+'''
+Generate a random matrix
+    X: n x n matrices
+'''
 
 mean = np.zeros(n)
 cov = np.identity(n) / n
@@ -25,29 +29,33 @@ df_eigenvals = pd.DataFrame(data={
     'imag_part': eigenvals.imag
 })
 
-df_eigenvals.to_csv('eigenvals.csv', index=False, encoding='utf-8')
+df_eigenvals.to_csv(str(Path(__file__).resolve().parent) + '/eigenvals.csv',
+                    index=False, encoding='utf-8', float_format='%.3f')
 
 
 # Generate p.d.f. points
 
 step = 0.025
-x = np.arange(-2.0, 2.0, step)
-y = np.arange(-2.0, 2.0, step)
-x, y = np.meshgrid(x, y)
-z = x**2 + y**2
+re, im = np.meshgrid(np.arange(-2.0, 2.0, step), np.arange(-2.0, 2.0, step))
+z = re**2 + im**2
 
 fig, ax = plt.subplots()
-cs = ax.contour(x, y, z, [1])
+cs = ax.contour(re, im, z, [1])
+p = cs.collections[0].get_paths()
+vs = [p_.vertices for p_ in p]
 
-p = cs.collections[0].get_paths()[0]
-v = p.vertices
-x = v[:, 0]
-y = v[:, 1]
+df_pdf = pd.DataFrame(columns=['real_part', 'imag_part', 'density', 'group'])
 
-df_pdf = pd.DataFrame(data={
-    'real_part': x,
-    'imag_part': y,
-    'density': None
-})
+for i, v in enumerate(vs):
+    df = pd.DataFrame(data={
+        'real_part': v[:, 0],
+        'imag_part': v[:, 1],
+        'density': None,
+        'group': i
+    })
 
-df_pdf.to_csv('pdf.csv', index=False, encoding='utf-8')
+    df_pdf = pd.concat([df_pdf, df], ignore_index=True)
+
+
+df_pdf.to_csv(str(Path(__file__).parent) + '/pdf.csv',
+              index=False, encoding='utf-8', float_format='%.3f')

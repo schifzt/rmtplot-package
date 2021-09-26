@@ -54,7 +54,7 @@ df_eigenvals = pd.DataFrame(data={
 })
 
 df_eigenvals.to_csv(str(Path(__file__).resolve().parent) + '/eigenvals.csv',
-                    index=False, encoding='utf-8')
+                    index=False, encoding='utf-8', float_format='%.3f')
 
 
 '''
@@ -88,4 +88,4 @@ for i, v in enumerate(vs):
 
 
 df_pdf.to_csv(str(Path(__file__).parent) + '/pdf.csv',
-              index=False, encoding='utf-8')
+              index=False, encoding='utf-8', float_format='%.3f')

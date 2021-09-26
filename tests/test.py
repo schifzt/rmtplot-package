@@ -35,9 +35,9 @@ lavender = dict(
 
 
 target = 'Marchenko_Pastur'
-target = 'Semicircle_Law'
+# target = 'Semicircle_Law'
 target = 'Circular_Law'
-target = 'Kronecker'
+# target = 'Kronecker'
 
 
 df_pdf = pd.read_csv(target + '/pdf.csv')
@@ -47,7 +47,7 @@ df_eigenvals = pd.read_csv(target + '/eigenvals.csv')
 rmtplot = rmtplot.RMTplot(df_eigenvals, df_pdf,
                           color=lavender,
                           theme='matlab',
-                          fill=False,
+                          fill=True,
                           gridline=True)
 
 traces, layout, config = rmtplot.get_components()

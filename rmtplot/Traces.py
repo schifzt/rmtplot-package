@@ -19,13 +19,13 @@ class Traces:
     def fit(self):
         if self.eigen_type == 'real':
             self._fit_empirical_dist_real()
-            self._fit_spectral_density_real()
             self._fit_empirical_dist_real_rug()
+            self._fit_spectral_density_real()
 
             self.data = self.spectral_density
             self.data.extend([
-                self.empirical_dist,
-                self.empirical_dist_rug
+                self.empirical_dist_rug,
+                self.empirical_dist
             ])
 
         elif self.eigen_type == 'complex':
@@ -76,21 +76,28 @@ class Traces:
         )
 
     def _fit_spectral_density_real(self):
-        self.spectral_density = go.Scatter(
-            mode='lines',
-            x=self.df_pdf['real_part'],
-            y=self.df_pdf['density'],
-            name='spectral density',
-            line=dict(
-                color=self.color['line'],
-                dash='solid',
-                width=3
-            )
-        )
+        for _, df in self.df_pdf.groupby("group"):
+            self.spectral_density.extend([
+                go.Scatter(
+                    mode='lines',
+                    x=df['real_part'].values,
+                    y=self.df_pdf['density'].values,
+                    name='spectral density',
+                    line=dict(
+                        color=self.color['line'],
+                        dash='solid',
+                        width=3
+                    ),
+                    showlegend=False
+                )
+            ])
+
+        self.spectral_density[0]['showlegend'] = True
 
         if self.fill:
-            self.spectral_density['fill'] = 'tonexty'
-            self.spectral_density['fillcolor'] = self.color['fill']
+            for sd in self.spectral_density:
+                sd['fill'] = 'tonexty'
+                sd['fillcolor'] = self.color['fill']
 
         return self
 
