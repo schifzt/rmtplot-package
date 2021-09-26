@@ -12,12 +12,12 @@ class RMTplot:
             self,
             df_eigenvals,
             df_pdf,
-            color,
             *,
+            color='lavender',
             theme='matlab',
             fill=False,
             gridline=False,
-            to_imege_format='svg'
+            save_img_as='png'
     ):
         self.df_eigenvals = df_eigenvals
         self.df_pdf = df_pdf
@@ -25,7 +25,7 @@ class RMTplot:
         self.theme = theme
         self.fill = fill
         self.gridline = gridline
-        self.to_imege_format = to_imege_format
+        self.save_img_as = save_img_as
 
         self.check_eigen_type()
 
@@ -53,10 +53,10 @@ class RMTplot:
             showSendToCloud=False,
             plotlyServerURL="https://chart-studio.plotly.com",
             toImageButtonOptions=dict(
-                format=self.to_imege_format,
+                format=self.save_img_as,
                 filename='rmt',
-                height=600,
-                width=600,
+                # height=600,
+                # width=600,
                 scale=1
             ),
             displayModeBar=True,

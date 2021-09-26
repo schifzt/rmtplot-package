@@ -36,14 +36,16 @@ lavender = dict(
 
 target = 'Marchenko_Pastur'
 target = 'Semicircle_Law'
-# target = 'Circular_Law'
+target = 'Circular_Law'
+target = 'Kronecker'
 
 
 df_pdf = pd.read_csv(target + '/pdf.csv')
 df_eigenvals = pd.read_csv(target + '/eigenvals.csv')
 
 
-rmtplot = rmtplot.RMTplot(df_eigenvals, df_pdf, color=lavender,
+rmtplot = rmtplot.RMTplot(df_eigenvals, df_pdf,
+                          color=lavender,
                           theme='matlab',
                           fill=False,
                           gridline=True)
@@ -51,20 +53,16 @@ rmtplot = rmtplot.RMTplot(df_eigenvals, df_pdf, color=lavender,
 traces, layout, config = rmtplot.get_components()
 
 
-fig = go.Figure()
-
-fig.add_trace(traces.spectral_density)
-fig.add_trace(traces.empirical_dist)
-fig.add_trace(traces.empirical_dist_rug)
+fig = go.Figure(data=traces.data, layout=layout)
 
 fig.update_layout(layout)
 
-# fig.show(config=config, renderer='browser')
+fig.show(config=config, renderer='browser')
 # iplot(fig)
-fig.write_html(target + '.html',
-               config=config,
-               include_plotlyjs='cdn',
-               include_mathjax='cdn',
-               full_html=True,
-               auto_open=True,
-               )
+# fig.write_html(target + '.html',
+#                config=config,
+#                include_plotlyjs='cdn',
+#                include_mathjax='cdn',
+#                full_html=True,
+#                auto_open=True,
+#                )
