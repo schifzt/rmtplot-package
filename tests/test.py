@@ -57,12 +57,12 @@ fig = go.Figure(data=traces.data, layout=layout)
 
 fig.update_layout(layout)
 
-fig.show(config=config, renderer='browser')
+# fig.show(config=config, renderer='browser')
 # iplot(fig)
-# fig.write_html(target + '.html',
-#                config=config,
-#                include_plotlyjs='cdn',
-#                include_mathjax='cdn',
-#                full_html=True,
-#                auto_open=True,
-#                )
+fig.write_html(target + '.html',
+               config=config,
+               include_plotlyjs='cdn',
+               include_mathjax='cdn',
+               full_html=True,
+               auto_open=True,
+               )
