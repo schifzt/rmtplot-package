@@ -1,7 +1,8 @@
 .vscode/
 sample/
+assets/
 tests/*_.py
-
+tests/*.html
 # *.csv
 
 

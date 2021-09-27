@@ -130,7 +130,7 @@ class RMTplot:
             legend=dict(
                 x=1, xanchor='right',
                 y=1,
-                bgcolor='rgba(255, 255, 255, 1)'
+                bgcolor='rgba(255, 255, 255, 0.65)'
             ),
             modebar=dict(
                 orientation='h'

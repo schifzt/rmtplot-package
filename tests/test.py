@@ -47,7 +47,7 @@ df_eigenvals = pd.read_csv(target + '/eigenvals.csv')
 rmtplot = rmtplot.RMTplot(df_eigenvals, df_pdf,
                           color=lavender,
                           theme='matlab',
-                          fill=True,
+                          fill=False,
                           gridline=True)
 
 traces, layout, config = rmtplot.get_components()
