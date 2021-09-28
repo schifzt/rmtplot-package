@@ -13,9 +13,11 @@ Implementation of this paper:
     DOI: 10.1214/18-AIHP894
 '''
 
+N = 1000
 
-# params = np.array([n])
-# np.savetxt('params.csv', params, delimiter=',', fmt='%.3f')
+params = np.array([N])
+np.savetxt(str(Path(__file__).resolve().parent) + '/parameters.csv', params,
+           delimiter=',', fmt='%.4f')
 
 '''
 Generate a random matrix
@@ -25,15 +27,15 @@ Generate a random matrix
     X: NL x NL matrices
 '''
 
-N = 5000
 
-pole = [-0.97, 0.97]
+# pole = [-0.97, 0.97]
 # pole = [-1.0, 1.0]
 # pole = [-1.03, 1.03]
 # pole = [0, -1.4, 1.4, 0.8+1.26j, -0.8+1.26j]
 # pole = [complex(np.cos(pm1*np.pi/6), np.sin(pm1*np.pi/6))*(pm2*0.97)
 #         for pm1 in [+1, -1] for pm2 in [+1, -1]]
-
+pole = [complex(np.cos(i*np.pi/4), np.sin(i*np.pi/4))*(1.42)
+        for i in range(8)]
 
 a = np.diagflat(pole)
 I = np.identity(N)
@@ -54,7 +56,7 @@ df_eigenvals = pd.DataFrame(data={
 })
 
 df_eigenvals.to_csv(str(Path(__file__).resolve().parent) + '/eigenvals.csv',
-                    index=False, encoding='utf-8', float_format='%.3f')
+                    index=False, encoding='utf-8', float_format='%.4f')
 
 
 '''
@@ -88,4 +90,4 @@ for i, v in enumerate(vs):
 
 
 df_pdf.to_csv(str(Path(__file__).parent) + '/pdf.csv',
-              index=False, encoding='utf-8', float_format='%.3f')
+              index=False, encoding='utf-8', float_format='%.4f')

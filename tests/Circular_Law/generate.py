@@ -11,7 +11,7 @@ n = 5000
 
 params = np.array([n])
 np.savetxt(str(Path(__file__).resolve().parent) + '/parameters.csv', params,
-           delimiter=',', fmt='%.3f')
+           delimiter=',', fmt='%.4f')
 
 '''
 Generate a random matrix
@@ -30,12 +30,12 @@ df_eigenvals = pd.DataFrame(data={
 })
 
 df_eigenvals.to_csv(str(Path(__file__).resolve().parent) + '/eigenvals.csv',
-                    index=False, encoding='utf-8', float_format='%.3f')
+                    index=False, encoding='utf-8', float_format='%.4f')
 
 
 # Generate p.d.f. points
 
-step = 0.025
+step = 0.01
 re, im = np.meshgrid(np.arange(-2.0, 2.0, step), np.arange(-2.0, 2.0, step))
 z = re**2 + im**2
 
@@ -58,4 +58,4 @@ for i, v in enumerate(vs):
 
 
 df_pdf.to_csv(str(Path(__file__).parent) + '/pdf.csv',
-              index=False, encoding='utf-8', float_format='%.3f')
+              index=False, encoding='utf-8', float_format='%.4f')

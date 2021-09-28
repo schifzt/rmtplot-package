@@ -10,7 +10,7 @@ d = int(n*a)
 
 params = pd.DataFrame(data={'a': a, 'n': n, 'd': d}, index=[0])
 params.to_csv(str(Path(__file__).resolve().parent) + '/parameters.csv',
-              encoding='utf-8', float_format='%.3f')
+              encoding='utf-8', float_format='%.4f')
 
 '''
 Generate a random matrix
@@ -31,7 +31,7 @@ df_eigenvals = pd.DataFrame(data={
 })
 
 df_eigenvals.to_csv(str(Path(__file__).resolve().parent) + '/eigenvals.csv',
-                    index=False, encoding='utf-8', float_format='%.3f')
+                    index=False, encoding='utf-8', float_format='%.4f')
 
 
 '''
@@ -74,4 +74,4 @@ for i, v in enumerate(vs):
 
 
 df_pdf.to_csv(str(Path(__file__).parent) + '/pdf.csv',
-              index=False, encoding='utf-8', float_format='%.3f')
+              index=False, encoding='utf-8', float_format='%.4f')

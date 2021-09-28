@@ -10,70 +10,37 @@ class Traces:
         self.df_pdf = args['df_pdf']
         self.color = args['color']
         self.fill = args['fill']
-        self.eigen_type = args['eigen_type']
+        self._eigen_type = args['_eigen_type']
+
+        self.data = []
 
         self.spectral_density = []
-        self.empirical_dist = dict()
-        self.empirical_dist_rug = dict()
+        self.empirical_dist = []
+        self.empirical_dist_rug = []
 
     def fit(self):
-        if self.eigen_type == 'real':
-            self._fit_empirical_dist_real()
-            self._fit_empirical_dist_real_rug()
-            self._fit_spectral_density_real()
+        if self._eigen_type == 'real':
+            if self.df_pdf is not None:
+                self._fit_spectral_density_real()
+                self.data.extend(self.spectral_density)
 
-            self.data = self.spectral_density
-            self.data.extend([
-                self.empirical_dist_rug,
-                self.empirical_dist
-            ])
+            if self.df_eigenvals is not None:
+                self._fit_empirical_dist_real()
+                self._fit_empirical_dist_real_rug()
 
-        elif self.eigen_type == 'complex':
-            self._fit_empirical_dist_complex()
-            self._fit_spectral_density_complex()
+                self.data.extend(self.empirical_dist)
+                self.data.extend(self.empirical_dist_rug)
 
-            self.data = self.spectral_density
-            self.data.extend([
-                self.empirical_dist
-            ])
+        elif self._eigen_type == 'complex':
+            if self.df_pdf is not None:
+                self._fit_spectral_density_complex()
+                self.data.extend(self.spectral_density)
 
-        return self
-
-    def _fit_empirical_dist_real(self):
-        self.empirical_dist = go.Histogram(
-            x=self.df_eigenvals['real_part'],
-            histnorm='probability density',
-            name='empirical distribution',
-            marker=dict(
-                color=self.color['fill'],
-                line=dict(
-                    color=self.color['border'],
-                    width=2,
-                ),
-                pattern=dict(
-                    fillmode='overlay',
-                )
-            ),
-            xbins=dict(
-                size=0.05
-            ),
-            hoverinfo='skip',
-        )
+            if self.df_eigenvals is not None:
+                self._fit_empirical_dist_complex()
+                self.data.extend(self.empirical_dist)
 
         return self
-
-    def _fit_empirical_dist_real_rug(self):
-        self.empirical_dist_rug = go.Box(
-            x=self.df_eigenvals['real_part'],
-            name='',
-            boxpoints='all', hoverinfo='x', hoveron='points', jitter=0,
-            marker=dict(
-                symbol='line-ns-open',
-                color=self.color['rug'],
-                size=20,
-            ),
-            showlegend=False, fillcolor='rgba(255,255,255,1)', line_color='rgba(255,255,255,0)',
-        )
 
     def _fit_spectral_density_real(self):
         for _, df in self.df_pdf.groupby("group"):
@@ -95,26 +62,47 @@ class Traces:
         self.spectral_density[0]['showlegend'] = True
 
         if self.fill:
-            for sd in self.spectral_density:
-                sd['fill'] = 'tonexty'
-                sd['fillcolor'] = self.color['fill']
+            for scatter in self.spectral_density:
+                scatter['fill'] = 'tonexty'
+                scatter['fillcolor'] = self.color['fill']
 
         return self
 
-    def _fit_empirical_dist_complex(self):
-        self.empirical_dist = go.Scatter(
-            name='sample',
-            mode='markers',
-            type='scatter',
+    def _fit_empirical_dist_real(self):
+        self.empirical_dist = [go.Histogram(
             x=self.df_eigenvals['real_part'],
-            y=self.df_eigenvals['imag_part'],
+            histnorm='probability density',
+            name='empirical distribution',
             marker=dict(
-                color=self.color['border'],
-                size=3
-            )
-        )
+                color=self.color['fill'],
+                line=dict(
+                    color=self.color['border'],
+                    width=2,
+                ),
+                pattern=dict(
+                    fillmode='overlay',
+                )
+            ),
+            xbins=dict(
+                size=0.05
+            ),
+            hoverinfo='skip',
+        )]
 
         return self
+
+    def _fit_empirical_dist_real_rug(self):
+        self.empirical_dist_rug = [go.Box(
+            x=self.df_eigenvals['real_part'],
+            name='',
+            boxpoints='all', hoverinfo='x', hoveron='points', jitter=0, y0=0,
+            marker=dict(
+                symbol='line-ns-open',
+                color=self.color['rug'],
+                size=20,
+            ),
+            showlegend=False, fillcolor='rgba(255,255,255,0)', line_color='rgba(255,255,255,0)',
+        )]
 
     def _fit_spectral_density_complex(self):
         for _, df in self.df_pdf.groupby("group"):
@@ -135,8 +123,23 @@ class Traces:
         self.spectral_density[0]['showlegend'] = True
 
         if self.fill:
-            for sd in self.spectral_density:
-                sd['fill'] = 'tonexty'
-                sd['fillcolor'] = self.color['fill']
+            for scatter in self.spectral_density:
+                scatter['fill'] = 'tonexty'
+                scatter['fillcolor'] = self.color['fill']
+
+        return self
+
+    def _fit_empirical_dist_complex(self):
+        self.empirical_dist = [go.Scatter(
+            name='sample',
+            mode='markers',
+            type='scatter',
+            x=self.df_eigenvals['real_part'],
+            y=self.df_eigenvals['imag_part'],
+            marker=dict(
+                color=self.color['border'],
+                size=3
+            )
+        )]
 
         return self

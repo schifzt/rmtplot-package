@@ -10,9 +10,9 @@ import numpy as np
 class RMTplot:
     def __init__(
             self,
-            df_eigenvals,
-            df_pdf,
             *,
+            df_eigenvals=None,
+            df_pdf=None,
             color='lavender',
             theme='matlab',
             fill=False,
@@ -27,13 +27,25 @@ class RMTplot:
         self.gridline = gridline
         self.save_img_as = save_img_as
 
+        self.verify_arguments()
         self.check_eigen_type()
 
+    def verify_arguments(self):
+        if(self.df_eigenvals is None and self.df_pdf is None):
+            raise ValueError(
+                "RMTplot() expects at least one dataframe for the arguments.")
+
     def check_eigen_type(self):
-        if np.count_nonzero(self.df_eigenvals['imag_part'].values) == 0:
-            self.eigen_type = 'real'
-        else:
-            self.eigen_type = 'complex'
+        if self.df_eigenvals is not None:
+            if np.count_nonzero(self.df_eigenvals['imag_part'].values) == 0:
+                self._eigen_type = 'real'
+            else:
+                self._eigen_type = 'complex'
+        elif self.df_pdf is not None:
+            if np.count_nonzero(self.df_pdf['imag_part'].values) == 0:
+                self._eigen_type = 'real'
+            else:
+                self._eigen_type = 'complex'
 
     def get_components(self):
         return self._create_traces(), self._create_layout(), self._create_config()
@@ -51,7 +63,7 @@ class RMTplot:
         config = dict(
             responsive=True,
             showSendToCloud=False,
-            plotlyServerURL="https://chart-studio.plotly.com",
+            # plotlyServerURL="https://chart-studio.plotly.com",
             toImageButtonOptions=dict(
                 format=self.save_img_as,
                 filename='rmt',
@@ -103,7 +115,7 @@ class RMTplot:
                         l=0,
                         r=0,
                     ),
-                    boxgap=1, boxgroupgap=1,
+                    boxgap=1
                 )
             )
 
@@ -116,7 +128,6 @@ class RMTplot:
                 showticklabels=True, ticks='inside',
                 autorange=True, rangemode='normal',
                 automargin=False,
-
             ),
             yaxis=dict(
                 showgrid=False,
@@ -143,7 +154,7 @@ class RMTplot:
                 b=45,  # Shift the same amount with l
                 l=55,  # Shift the same amount with b
             ),
-            boxgap=1, boxgroupgap=1,
+            boxgap=1
         )
 
         if self.theme == 'matlab':
@@ -181,7 +192,7 @@ class RMTplot:
                 )
             )
 
-        if self.eigen_type == 'real':
+        if self._eigen_type == 'real':
             layout.update(
                 yaxis=dict(
                     rangemode='nonnegative'
@@ -192,7 +203,7 @@ class RMTplot:
                     size=16,
                 )
             )
-        elif self.eigen_type == 'complex':
+        elif self._eigen_type == 'complex':
             layout.update(
                 xaxis_title=r'$\text{Re}\,\lambda$',
                 yaxis_title=r'$\text{Im}\,\lambda$',

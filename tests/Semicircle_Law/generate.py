@@ -11,7 +11,7 @@ N = 2000
 
 params = np.array([N])
 np.savetxt(str(Path(__file__).resolve().parent) + '/parameters.csv', params,
-           delimiter=',', fmt='%.3f')
+           delimiter=',', fmt='%.4f')
 
 '''
 Generate a Gaussian Orthogonal Ensemble(GOE)
@@ -36,7 +36,7 @@ df_eigenvals = pd.DataFrame(data={
 })
 
 df_eigenvals.to_csv(str(Path(__file__).resolve().parent) + '/eigenvals.csv',
-                    index=False, encoding='utf-8', float_format='%.3f')
+                    index=False, encoding='utf-8', float_format='%.4f')
 
 
 '''
@@ -44,7 +44,7 @@ Generate p.d.f. points
     y = 1/(2*pi)*np.sqrt(4-x**2)
 '''
 
-step = 0.025
+step = 0.01
 x, y = np.meshgrid(np.arange(-3.0, 3.0, step), np.arange(0.0, 1.0, step))
 z = x**2 + (2*np.pi*y)**2
 
@@ -67,4 +67,4 @@ for i, v in enumerate(vs):
 
 
 df_pdf.to_csv(str(Path(__file__).parent) + '/pdf.csv',
-              index=False, encoding='utf-8', float_format='%.3f')
+              index=False, encoding='utf-8', float_format='%.4f')

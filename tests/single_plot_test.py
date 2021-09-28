@@ -1,15 +1,8 @@
 #!bin/python3
 
 from context import rmtplot
-from plotly.subplots import make_subplots
 import pandas as pd
 import plotly.graph_objects as go
-
-# from IPython.display import HTML
-# from plotly.offline import init_notebook_mode, iplot
-# init_notebook_mode()
-# html_code = '''<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.min.js"></script>'''
-# HTML(html_code)
 
 
 blue = dict(
@@ -34,31 +27,31 @@ lavender = dict(
 )
 
 
-target = 'Marchenko_Pastur'
+# target = 'Marchenko_Pastur'
 # target = 'Semicircle_Law'
-target = 'Circular_Law'
-# target = 'Kronecker'
+# target = 'Circular_Law'
+target = 'Kronecker'
 
 
 df_pdf = pd.read_csv(target + '/pdf.csv')
 df_eigenvals = pd.read_csv(target + '/eigenvals.csv')
 
 
-rmtplot = rmtplot.RMTplot(df_eigenvals, df_pdf,
-                          color=lavender,
-                          theme='matlab',
-                          fill=False,
-                          gridline=True)
+plt = rmtplot.RMTplot(
+    df_eigenvals=df_eigenvals,
+    df_pdf=df_pdf,
+    color=lavender,
+    theme='matlab',
+    fill=True,
+    gridline=True)
 
-traces, layout, config = rmtplot.get_components()
-
+traces, layout, config = plt.get_components()
 
 fig = go.Figure(data=traces.data, layout=layout)
 
 fig.update_layout(layout)
 
 # fig.show(config=config, renderer='browser')
-# iplot(fig)
 fig.write_html(target + '.html',
                config=config,
                include_plotlyjs='cdn',
