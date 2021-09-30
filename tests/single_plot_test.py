@@ -27,10 +27,10 @@ lavender = dict(
 )
 
 
-# target = 'Marchenko_Pastur'
+target = 'Marchenko_Pastur'
 # target = 'Semicircle_Law'
 # target = 'Circular_Law'
-target = 'Kronecker'
+# target = 'Kronecker'
 
 
 df_pdf = pd.read_csv(target + '/pdf.csv')
@@ -42,8 +42,8 @@ plt = rmtplot.RMTplot(
     df_pdf=df_pdf,
     color=lavender,
     theme='matlab',
-    fill=True,
-    gridline=True)
+    fill=False
+)
 
 traces, layout, config = plt.get_components()
 
