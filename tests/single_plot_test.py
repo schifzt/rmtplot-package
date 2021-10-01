@@ -42,7 +42,8 @@ plt = rmtplot.RMTplot(
     df_pdf=df_pdf,
     color=lavender,
     theme='matlab',
-    fill=False
+    fill=False,
+    slider=False,
 )
 
 traces, layout, config = plt.get_components()
@@ -51,11 +52,11 @@ fig = go.Figure(data=traces.data, layout=layout)
 
 fig.update_layout(layout)
 
-# fig.show(config=config, renderer='browser')
-fig.write_html(target + '.html',
-               config=config,
-               include_plotlyjs='cdn',
-               include_mathjax='cdn',
-               full_html=True,
-               auto_open=True,
-               )
+fig.show(config=config, renderer='browser')
+# fig.write_html(target + '.html',
+#                config=config,
+#                include_plotlyjs='cdn',
+#                include_mathjax='cdn',
+#                full_html=True,
+#                auto_open=True,
+#                )

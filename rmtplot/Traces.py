@@ -10,7 +10,8 @@ class Traces:
         self.df_pdf = args['df_pdf']
         self.color = args['color']
         self.fill = args['fill']
-        self._eigen_type = args['_eigen_type']
+        self.params = args['params']
+        self.eigen_type = args['eigen_type']
 
         self.data = []
 
@@ -19,7 +20,7 @@ class Traces:
         self.empirical_dist_rug = []
 
     def fit(self):
-        if self._eigen_type == 'real':
+        if self.eigen_type == 'real':
             if self.df_pdf is not None:
                 self._fit_spectral_density_real()
                 self.data.extend(self.spectral_density)
@@ -31,7 +32,7 @@ class Traces:
                 self.data.extend(self.empirical_dist)
                 self.data.extend(self.empirical_dist_rug)
 
-        elif self._eigen_type == 'complex':
+        elif self.eigen_type == 'complex':
             if self.df_pdf is not None:
                 self._fit_spectral_density_complex()
                 self.data.extend(self.spectral_density)
@@ -43,23 +44,27 @@ class Traces:
         return self
 
     def _fit_spectral_density_real(self):
-        for _, df in self.df_pdf.groupby("group"):
-            self.spectral_density.extend([
-                go.Scatter(
-                    mode='lines',
-                    x=df['real_part'].values,
-                    y=self.df_pdf['density'].values,
-                    name='spectral density',
-                    line=dict(
-                        color=self.color['line'],
-                        dash='solid',
-                        width=3
-                    ),
-                    showlegend=False
-                )
-            ])
+        p_keys = list(self.params.keys())
+        for p_vals, df1 in self.df_pdf.groupby(p_keys):
+            for _, df2 in df1.groupby("group"):
+                self.spectral_density.extend([
+                    go.Scatter(
+                        mode='lines',
+                        x=df2['real_part'].values,
+                        y=df2['density'].values,
+                        name='spectral density' + ' ' +
+                        str(tuple(p_keys)) + '=' + str(p_vals),
+                        line=dict(
+                            color=self.color['line'],
+                            dash='solid',
+                            width=3
+                        ),
+                        showlegend=False,
+                        visible=True,
+                    )
+                ])
 
-        self.spectral_density[0]['showlegend'] = True
+            self.spectral_density[-1]['showlegend'] = True
 
         if self.fill:
             for scatter in self.spectral_density:

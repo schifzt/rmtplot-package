@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 #!bin/python3
 
-import plotly.graph_objects as go
 from rmtplot.Traces import Traces
+from collections import OrderedDict
+from itertools import product
+import plotly.graph_objects as go
 import numpy as np
 # import importlib
 
@@ -16,6 +18,7 @@ class RMTplot:
             color='lavender',
             theme='matlab',
             fill=False,
+            slider=False,
             save_img_as='png'
     ):
         self.df_eigenvals = df_eigenvals
@@ -23,10 +26,12 @@ class RMTplot:
         self.color = color
         self.theme = theme
         self.fill = fill
+        self.slider = slider
         self.save_img_as = save_img_as
 
         self.validate_arguments()
         self.check_eigen_type()
+        self.retrieve_parameters()
 
     def validate_arguments(self):
         if(self.df_eigenvals is None and self.df_pdf is None):
@@ -37,14 +42,20 @@ class RMTplot:
     def check_eigen_type(self):
         if self.df_eigenvals is not None:
             if np.count_nonzero(self.df_eigenvals['imag_part'].values) == 0:
-                self._eigen_type = 'real'
+                self.eigen_type = 'real'
             else:
-                self._eigen_type = 'complex'
+                self.eigen_type = 'complex'
         elif self.df_pdf is not None:
             if np.count_nonzero(self.df_pdf['imag_part'].values) == 0:
-                self._eigen_type = 'real'
+                self.eigen_type = 'real'
             else:
-                self._eigen_type = 'complex'
+                self.eigen_type = 'complex'
+
+    def retrieve_parameters(self):
+        non_params_cols = ['real_part', 'imag_part', 'density', 'group']
+        p_keys = list(set(self.df_pdf.columns.values) - set(non_params_cols))
+        p_ranges = [self.df_pdf[p_key].unique() for p_key in p_keys]
+        self.params = OrderedDict(zip(p_keys, p_ranges))
 
     def get_components(self):
         return self._create_traces(), self._create_layout(), self._create_config()
@@ -146,11 +157,11 @@ class RMTplot:
                 ),
                 margin=dict(
                     autoexpand=False,
-                    pad=0,
-                    t=30,  # Fix
-                    r=20,  # Fix
-                    b=45,  # Shift the same amount with l
-                    l=55,  # Shift the same amount with b
+                    # pad=0,
+                    # t=30,  # Fix
+                    # r=20,  # Fix
+                    # b=45,  # Shift the same amount with l
+                    # l=55,  # Shift the same amount with b
                 ),
                 boxgap=1
             )
@@ -182,7 +193,7 @@ class RMTplot:
                     )
                 )
 
-        if self._eigen_type == 'real':
+        if self.eigen_type == 'real':
             layout.update(
                 yaxis=dict(
                     rangemode='nonnegative'
@@ -193,13 +204,39 @@ class RMTplot:
                     size=16,
                 )
             )
-        elif self._eigen_type == 'complex':
+        elif self.eigen_type == 'complex':
             layout.update(
                 xaxis_title=r'$\text{Re}\,\lambda$',
                 yaxis_title=r'$\text{Im}\,\lambda$',
                 font=dict(
                     size=16,
                 )
+            )
+
+        if self.slider:
+            p_valss = [x for x in product(*self.params.values())]
+            steps = []
+
+            for i, p_vals in enumerate(p_valss):
+                step = dict(
+                    method="update",
+                    args=[{"visible": [True] * len(p_valss)}],
+                )
+                step["args"][-1]["visible"][i] = True
+                steps.append(step)
+
+            layout.update(
+                xaxis=dict(
+                    rangeslider=dict(
+                        visible=True
+                    )
+                ),
+                sliders=[dict(
+                    active=2,
+                    currentvalue={"prefix": "Frequency: "},
+                    pad={"t": 20},
+                    steps=steps
+                )]
             )
 
         return layout
