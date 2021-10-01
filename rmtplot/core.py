@@ -157,11 +157,11 @@ class RMTplot:
                 ),
                 margin=dict(
                     autoexpand=False,
-                    # pad=0,
-                    # t=30,  # Fix
-                    # r=20,  # Fix
-                    # b=45,  # Shift the same amount with l
-                    # l=55,  # Shift the same amount with b
+                    pad=0,
+                    t=30,  # Fix
+                    r=20,  # Fix
+                    b=45,  # Shift the same amount with l (min: 45)
+                    l=55,  # Shift the same amount with b (min: 55)
                 ),
                 boxgap=1
             )
@@ -213,30 +213,27 @@ class RMTplot:
                 )
             )
 
-        if self.slider:
-            p_valss = [x for x in product(*self.params.values())]
-            steps = []
+        # if self.slider:
+        #     p_valpairs = [x for x in product(*self.params.values())]
+        #     steps = []
 
-            for i, p_vals in enumerate(p_valss):
-                step = dict(
-                    method="update",
-                    args=[{"visible": [True] * len(p_valss)}],
-                )
-                step["args"][-1]["visible"][i] = True
-                steps.append(step)
+        #     for i, p_valpair in enumerate(p_valpairs):
+        #         print(i, p_valpair)
+        #         step = dict(
+        #             method="restyle",
+        #             args=[{"visible": [False] * (len(p_valpairs))}],
+        #             # args=[{"visible": False}],
+        #         )
+        #         # make only a current step visible
+        #         step["args"][0]["visible"][i] = True
+        #         steps.append(step)
 
-            layout.update(
-                xaxis=dict(
-                    rangeslider=dict(
-                        visible=True
-                    )
-                ),
-                sliders=[dict(
-                    active=2,
-                    currentvalue={"prefix": "Frequency: "},
-                    pad={"t": 20},
-                    steps=steps
-                )]
-            )
+        #     layout.update(
+        #         sliders=[dict(
+        #             active=0,
+        #             pad={"t": 30},
+        #             steps=steps
+        #         )]
+        #     )
 
         return layout

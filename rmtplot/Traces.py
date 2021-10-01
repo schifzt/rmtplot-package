@@ -45,15 +45,15 @@ class Traces:
 
     def _fit_spectral_density_real(self):
         p_keys = list(self.params.keys())
-        for p_vals, df1 in self.df_pdf.groupby(p_keys):
-            for _, df2 in df1.groupby("group"):
+
+        if not p_keys:  # if p_keys == []
+            for _, df2 in self.df_pdf.groupby("group"):
                 self.spectral_density.extend([
                     go.Scatter(
                         mode='lines',
                         x=df2['real_part'].values,
                         y=df2['density'].values,
-                        name='spectral density' + ' ' +
-                        str(tuple(p_keys)) + '=' + str(p_vals),
+                        name='spectral density',
                         line=dict(
                             color=self.color['line'],
                             dash='solid',
@@ -65,6 +65,32 @@ class Traces:
                 ])
 
             self.spectral_density[-1]['showlegend'] = True
+        else:
+            for p_valpair, df1 in self.df_pdf.groupby(p_keys):
+                for _, df2 in df1.groupby("group"):
+                    p_legend = ' '
+                    for i, p_key in enumerate(p_keys):
+                        if i > 0:
+                            p_legend += ', '
+                        p_legend += p_key + '=' + str(p_valpair[i])
+
+                    self.spectral_density.extend([
+                        go.Scatter(
+                            mode='lines',
+                            x=df2['real_part'].values,
+                            y=df2['density'].values,
+                            name='spectral density' + p_legend,
+                            line=dict(
+                                color=self.color['line'],
+                                dash='solid',
+                                width=3
+                            ),
+                            showlegend=False,
+                            visible=True,
+                        )
+                    ])
+
+                self.spectral_density[-1]['showlegend'] = True
 
         if self.fill:
             for scatter in self.spectral_density:

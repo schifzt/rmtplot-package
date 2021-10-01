@@ -43,14 +43,12 @@ plt = rmtplot.RMTplot(
     color=lavender,
     theme='matlab',
     fill=False,
-    slider=False,
+    slider=True,
 )
 
 traces, layout, config = plt.get_components()
 
 fig = go.Figure(data=traces.data, layout=layout)
-
-fig.update_layout(layout)
 
 fig.show(config=config, renderer='browser')
 # fig.write_html(target + '.html',
