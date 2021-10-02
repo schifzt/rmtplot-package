@@ -27,10 +27,10 @@ lavender = dict(
 )
 
 
-target = 'Marchenko_Pastur'
-# target = 'Semicircle_Law'
-# target = 'Circular_Law'
-# target = 'Kronecker'
+# target = 'Marchenko_Pastur'
+target = 'Semicircle_Law'
+target = 'Circular_Law'
+target = 'Kronecker'
 
 
 df_pdf = pd.read_csv(target + '/pdf.csv')

@@ -79,7 +79,7 @@ class RMTplot:
                 filename='rmt',
                 # height=600,
                 # width=600,
-                scale=2
+                scale=1
             ),
             displayModeBar=True,
             displaylogo=False,

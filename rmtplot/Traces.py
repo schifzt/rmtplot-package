@@ -67,13 +67,17 @@ class Traces:
             self.spectral_density[-1]['showlegend'] = True
         else:
             for p_valpair, df1 in self.df_pdf.groupby(p_keys):
-                for _, df2 in df1.groupby("group"):
+                # Create legend for each parameter
+                if type(p_valpair) is tuple:
                     p_legend = ' '
                     for i, p_key in enumerate(p_keys):
                         if i > 0:
                             p_legend += ', '
                         p_legend += p_key + '=' + str(p_valpair[i])
+                else:
+                    p_legend = ' ' + p_keys[0] + '=' + str(p_valpair)
 
+                for _, df2 in df1.groupby("group"):
                     self.spectral_density.extend([
                         go.Scatter(
                             mode='lines',

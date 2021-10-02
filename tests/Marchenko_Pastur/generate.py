@@ -8,7 +8,7 @@ from collections import OrderedDict
 
 params = dict(
     a=[0.2, 0.4, 0.6, 0.8],  # d/n
-    b=[1]
+    # b=[1]
 )
 
 n = 1000
@@ -46,7 +46,7 @@ Generate density function points
 '''
 
 
-def density(x, a, b):
+def density(x, a):
     lb = (1-np.sqrt(a))**2
     ub = (1+np.sqrt(a))**2
 
