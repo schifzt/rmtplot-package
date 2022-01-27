@@ -46,7 +46,8 @@ class Traces:
     def _fit_spectral_density_real(self):
         p_keys = list(self.params.keys())
 
-        if not p_keys:  # if p_keys == []
+        # if p_keys == []
+        if not p_keys:
             for _, df2 in self.df_pdf.groupby("group"):
                 self.spectral_density.extend([
                     go.Scatter(

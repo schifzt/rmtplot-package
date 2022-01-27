@@ -18,7 +18,6 @@ class RMTplot:
             color='lavender',
             theme='matlab',
             fill=False,
-            slider=False,
             save_img_as='png'
     ):
         self.df_eigenvals = df_eigenvals
@@ -26,7 +25,6 @@ class RMTplot:
         self.color = color
         self.theme = theme
         self.fill = fill
-        self.slider = slider
         self.save_img_as = save_img_as
 
         self.validate_arguments()

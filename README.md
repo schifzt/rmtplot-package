@@ -6,11 +6,11 @@ A wrapper package for [plotly.py](https://github.com/plotly/plotly.py) specializ
 ## Install
 If `make` command is available, `make install` will install the package.
 
-Otherwise,
+Otherwise, invoke:
 ```
 	python setup.py bdist_wheel
 	pip install -e ${PWD}
 ```
 
 ## License
-Code released under the [MIT license](packages/python/chart-studio/LICENSE.txt).
+Code released under the [MIT license](https://opensource.org/licenses/MIT).

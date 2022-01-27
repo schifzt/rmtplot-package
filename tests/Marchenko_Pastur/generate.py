@@ -7,7 +7,7 @@ from pathlib import Path
 from collections import OrderedDict
 
 params = dict(
-    a=[0.2, 0.4, 0.6, 0.8],  # d/n
+    a=[0.2, 0.4],  # d/n
     # b=[1]
 )
 
