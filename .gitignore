@@ -3,6 +3,7 @@ sample/
 assets/
 tests/*_.py
 tests/*.html
+.idea/
 # *.csv
 
 
